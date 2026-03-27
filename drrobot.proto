@@ -1,0 +1,51 @@
+syntax = "proto3";
+
+package drrobot;
+
+// Input for the /chat endpoint
+message ChatRequest {
+  string query = 1;      // User's message or query
+  string session_id = 2; // Unique identifier for the chat session
+}
+
+// Input for the /water endpoint
+message WaterRequest {
+  string state = 1;      // State name (e.g., "kaduna")
+  string country = 2;    // Country name (e.g., "nigeria")
+}
+
+// Result of the chat call (proxied from HF)
+message ChatResponse {
+  bool success = 1;
+  string endpoint = 2;
+  string responseTime = 3;
+  int32 statusCode = 4;
+  map<string, string> data = 5; 
+}
+
+// Result of the water call (proxied from HF)
+message WaterResponse {
+  bool success = 1;
+  string endpoint = 2;
+  string responseTime = 3;
+  int32 statusCode = 4;
+  map<string, string> data = 5;
+}
+
+// Combined results for the /both endpoint
+message BothResponse {
+  bool success = 1;
+  string responseTime = 2;
+  message Results {
+    ChatResponse chat = 1;
+    WaterResponse water = 2;
+  }
+  Results results = 3;
+}
+
+// Service definition if gRPC is intended
+service DoctorRobot {
+  rpc AskChat(ChatRequest) returns (ChatResponse);
+  rpc PredictWater(WaterRequest) returns (WaterResponse);
+  rpc GetBoth(ChatRequest) returns (BothResponse);
+}
