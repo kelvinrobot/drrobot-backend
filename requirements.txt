@@ -3,3 +3,5 @@ uvicorn
 httpx
 python-multipart
 python-dotenv
+grpcio
+grpcio-tools
