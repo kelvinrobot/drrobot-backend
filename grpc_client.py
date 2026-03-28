@@ -1,45 +1,38 @@
 import grpc
 import time
+import sys
 import drrobot_pb2
 import drrobot_pb2_grpc
 
 def run():
+    # Use command-line arguments for state and country or default values
+    state = sys.argv[1] if len(sys.argv) > 1 else "kaduna"
+    country = sys.argv[2] if len(sys.argv) > 2 else "nigeria"
+
     # Connect to the gRPC server
     with grpc.insecure_channel('localhost:50051') as channel:
         stub = drrobot_pb2_grpc.DoctorRobotStub(channel)
         
-        while True:
-            print("\n" + "="*30)
-            print(" Doctor Robot gRPC Client ")
-            print(" (Water Borne Disease) ")
-            print("="*30)
-            print("1. Test PredictWater (Disease Prediction)")
-            print("2. Exit")
+        print(f"\n--- gRPC Call: PredictWater (State: {state}, Country: {country}) ---")
+        
+        water_request = drrobot_pb2.WaterRequest(
+            state=state,
+            country=country
+        )
+        
+        try:
+            start_time = time.time()
+            response = stub.PredictWater(water_request)
+            end_time = time.time()
             
-            choice = input("\nEnter your choice (1-2): ")
+            print(f"Success: {response.success}")
+            print(f"Status Code: {response.statusCode}")
+            print(f"Data: {response.data}")
+            print(f"Backend Wall-clock Time: {response.responseTime}")
+            print(f"Full Round-trip Time: {int((end_time - start_time) * 1000)}ms")
             
-            if choice == '1':
-                state = input("Enter state (default: kaduna): ") or "kaduna"
-                country = input("Enter country (default: nigeria): ") or "nigeria"
-                print("\n--- Testing Water Born Disease Prediction ---")
-                water_request = drrobot_pb2.WaterRequest(
-                    state=state,
-                    country=country
-                )
-                try:
-                    response = stub.PredictWater(water_request)
-                    print(f"Success: {response.success}")
-                    print(f"Data: {response.data}")
-                    print(f"Status Code: {response.statusCode}")
-                    print(f"Response Time: {response.responseTime}")
-                except grpc.RpcError as e:
-                    print(f"gRPC call failed: {e.code()} - {e.details()}")
-
-            elif choice == '2':
-                print("Goodbye!")
-                break
-            else:
-                print("Invalid choice. Try again.")
+        except grpc.RpcError as e:
+            print(f"gRPC call failed: {e.code()} - {e.details()}")
 
 if __name__ == "__main__":
     run()
