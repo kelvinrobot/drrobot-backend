@@ -35,20 +35,10 @@ class DoctorRobotStub(object):
         Args:
             channel: A grpc.Channel.
         """
-        self.AskChat = channel.unary_unary(
-                '/drrobot.DoctorRobot/AskChat',
-                request_serializer=drrobot__pb2.ChatRequest.SerializeToString,
-                response_deserializer=drrobot__pb2.ChatResponse.FromString,
-                _registered_method=True)
         self.PredictWater = channel.unary_unary(
                 '/drrobot.DoctorRobot/PredictWater',
                 request_serializer=drrobot__pb2.WaterRequest.SerializeToString,
                 response_deserializer=drrobot__pb2.WaterResponse.FromString,
-                _registered_method=True)
-        self.GetBoth = channel.unary_unary(
-                '/drrobot.DoctorRobot/GetBoth',
-                request_serializer=drrobot__pb2.ChatRequest.SerializeToString,
-                response_deserializer=drrobot__pb2.BothResponse.FromString,
                 _registered_method=True)
 
 
@@ -56,19 +46,7 @@ class DoctorRobotServicer(object):
     """Service definition if gRPC is intended
     """
 
-    def AskChat(self, request, context):
-        """Missing associated documentation comment in .proto file."""
-        context.set_code(grpc.StatusCode.UNIMPLEMENTED)
-        context.set_details('Method not implemented!')
-        raise NotImplementedError('Method not implemented!')
-
     def PredictWater(self, request, context):
-        """Missing associated documentation comment in .proto file."""
-        context.set_code(grpc.StatusCode.UNIMPLEMENTED)
-        context.set_details('Method not implemented!')
-        raise NotImplementedError('Method not implemented!')
-
-    def GetBoth(self, request, context):
         """Missing associated documentation comment in .proto file."""
         context.set_code(grpc.StatusCode.UNIMPLEMENTED)
         context.set_details('Method not implemented!')
@@ -77,20 +55,10 @@ class DoctorRobotServicer(object):
 
 def add_DoctorRobotServicer_to_server(servicer, server):
     rpc_method_handlers = {
-            'AskChat': grpc.unary_unary_rpc_method_handler(
-                    servicer.AskChat,
-                    request_deserializer=drrobot__pb2.ChatRequest.FromString,
-                    response_serializer=drrobot__pb2.ChatResponse.SerializeToString,
-            ),
             'PredictWater': grpc.unary_unary_rpc_method_handler(
                     servicer.PredictWater,
                     request_deserializer=drrobot__pb2.WaterRequest.FromString,
                     response_serializer=drrobot__pb2.WaterResponse.SerializeToString,
-            ),
-            'GetBoth': grpc.unary_unary_rpc_method_handler(
-                    servicer.GetBoth,
-                    request_deserializer=drrobot__pb2.ChatRequest.FromString,
-                    response_serializer=drrobot__pb2.BothResponse.SerializeToString,
             ),
     }
     generic_handler = grpc.method_handlers_generic_handler(
@@ -103,33 +71,6 @@ def add_DoctorRobotServicer_to_server(servicer, server):
 class DoctorRobot(object):
     """Service definition if gRPC is intended
     """
-
-    @staticmethod
-    def AskChat(request,
-            target,
-            options=(),
-            channel_credentials=None,
-            call_credentials=None,
-            insecure=False,
-            compression=None,
-            wait_for_ready=None,
-            timeout=None,
-            metadata=None):
-        return grpc.experimental.unary_unary(
-            request,
-            target,
-            '/drrobot.DoctorRobot/AskChat',
-            drrobot__pb2.ChatRequest.SerializeToString,
-            drrobot__pb2.ChatResponse.FromString,
-            options,
-            channel_credentials,
-            insecure,
-            call_credentials,
-            compression,
-            wait_for_ready,
-            timeout,
-            metadata,
-            _registered_method=True)
 
     @staticmethod
     def PredictWater(request,
@@ -148,33 +89,6 @@ class DoctorRobot(object):
             '/drrobot.DoctorRobot/PredictWater',
             drrobot__pb2.WaterRequest.SerializeToString,
             drrobot__pb2.WaterResponse.FromString,
-            options,
-            channel_credentials,
-            insecure,
-            call_credentials,
-            compression,
-            wait_for_ready,
-            timeout,
-            metadata,
-            _registered_method=True)
-
-    @staticmethod
-    def GetBoth(request,
-            target,
-            options=(),
-            channel_credentials=None,
-            call_credentials=None,
-            insecure=False,
-            compression=None,
-            wait_for_ready=None,
-            timeout=None,
-            metadata=None):
-        return grpc.experimental.unary_unary(
-            request,
-            target,
-            '/drrobot.DoctorRobot/GetBoth',
-            drrobot__pb2.ChatRequest.SerializeToString,
-            drrobot__pb2.BothResponse.FromString,
             options,
             channel_credentials,
             insecure,
